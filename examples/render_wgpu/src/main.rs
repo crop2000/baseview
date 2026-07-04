@@ -1,4 +1,4 @@
-use baseview::dpi::{LogicalSize, PhysicalSize};
+use baseview::dpi::{ PhysicalSize};
 use baseview::{
     Event, EventStatus, Window, WindowContext, WindowHandler, WindowOpenOptions, WindowSize,
 };
@@ -205,7 +205,7 @@ impl WindowHandler for WgpuExample {
 fn main() {
     let window_open_options = WindowOpenOptions::new()
         .with_title("WGPU on Baseview")
-        .with_size(LogicalSize::new(512, 512));
+        .with_size(PhysicalSize::new(512, 512));
 
     Window::open_blocking(window_open_options, |c| pollster::block_on(WgpuExample::new(c)));
 }
