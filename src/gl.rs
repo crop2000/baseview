@@ -1,6 +1,9 @@
+use x11rb::protocol::xproto::ConnectionExt;
+
 use crate::platform::gl::*;
 use std::ffi::c_void;
 use std::marker::PhantomData;
+use std::rc::Rc;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct GlConfig {
@@ -59,22 +62,46 @@ pub struct GlContext {
 
 impl GlContext {
     pub(crate) fn new(context: crate::platform::gl::GlContext) -> GlContext {
+        {
+            let p = &context as *const crate::platform::gl::GlContext;
+            dbg!(p);
+        }
+
         GlContext { inner: context, phantom: PhantomData }
     }
 
     pub unsafe fn make_current(&self) {
+        dbg!("p_x11_gl_mc");
+        {
+            let p = self as *const GlContext;
+            dbg!(p);
+
+            // let weak_count = std::rc::Rc::<_>::weak_count(&self.inner);
+            // let weak_count = std::rc::Rc::<_>::weak_count(&self.inner);
+            // dbg!(weak_count);
+            // let strong_count = std::rc::Rc::<_>::strong_count(&self.inner);
+            // dbg!(strong_count);
+            let p = &self.inner as *const Rc<GlContextInner>;
+            dbg!(p);
+            let p = &*self.inner as *const GlContextInner;
+            dbg!(p);
+        }
         self.inner.make_current();
     }
 
     pub unsafe fn make_not_current(&self) {
+        dbg!("p_x11_gl_mnc");
         self.inner.make_not_current();
     }
 
     pub fn get_proc_address(&self, symbol: &str) -> *const c_void {
+        dbg!("p_x11_gl_gpa");
         self.inner.get_proc_address(symbol)
+        // todo!()
     }
 
     pub fn swap_buffers(&self) {
+        dbg!("p_x11_gl_sb");
         self.inner.swap_buffers();
     }
 }

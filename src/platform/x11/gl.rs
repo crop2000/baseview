@@ -67,6 +67,7 @@ impl GlContextInner {
     pub fn create(
         window: c_ulong, connection: Rc<X11Connection>, config: FbConfig,
     ) -> Result<GlContextInner, GlError> {
+        dbg!("glci_c");
         let glx = Glx::open()?;
 
         let xlib_connection = connection.conn.xlib_connection();
@@ -138,7 +139,15 @@ impl GlContextInner {
     }
 
     pub unsafe fn make_current(&self) {
-        XErrorHandler::handle(self.connection.conn.xlib_connection(), |error_handler| {
+        dbg!("p_x11_gl_mc");
+        {
+            let p = self as *const GlContextInner;
+            dbg!(p);
+        }
+        let x11_connection = self.connection.clone();
+        dbg!("not reached after change");
+        let conn = x11_connection.conn.xlib_connection();
+        XErrorHandler::handle(conn, |error_handler| {
             self.glx
                 .make_current(
                     self.connection.conn.xlib_connection(),
@@ -166,6 +175,10 @@ impl GlContextInner {
     }
 
     pub fn swap_buffers(&self) {
+        {
+            let p = &*self as *const GlContextInner;
+            dbg!(p);
+        }
         XErrorHandler::handle(self.connection.conn.xlib_connection(), |error_handler| {
             self.glx
                 .swap_buffers(self.connection.conn.xlib_connection(), self.window, error_handler)

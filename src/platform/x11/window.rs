@@ -120,6 +120,7 @@ impl Window {
         build: impl FnOnce(WindowContext) -> H + Send + 'static,
         tx: mpsc::SyncSender<WindowOpenResult>, parent_handle: Option<ParentHandle>,
     ) -> Result<(), Box<dyn Error>> {
+        dbg!("wt");
         // Connect to the X server
         // FIXME: baseview error type instead of unwrap()
         let xcb_connection = X11Connection::new()?;
@@ -221,12 +222,14 @@ impl Window {
         let gl_context = visual_info.fb_config.map(|fb_config| {
             use std::ffi::c_ulong;
 
+            dbg!("wt_glc");
             let window = window_id.get() as c_ulong;
 
             // Because of the visual negotation we had to take some extra steps to create this context
             let context =
                 super::gl::GlContextInner::create(window, Rc::clone(&xcb_connection), fb_config)
                     .expect("Could not create OpenGL context");
+            dbg!("wt_glc2");
 
             Rc::new(context)
         });
