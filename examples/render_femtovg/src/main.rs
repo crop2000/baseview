@@ -1,4 +1,4 @@
-use baseview::dpi::{LogicalSize, PhysicalPosition};
+use baseview::dpi::{PhysicalPosition, PhysicalSize};
 use baseview::gl::{GlConfig, GlContext};
 use baseview::{
     Event, EventStatus, MouseEvent, Window, WindowContext, WindowHandler, WindowOpenOptions,
@@ -114,7 +114,7 @@ impl WindowHandler for FemtovgExample {
 fn main() {
     let window_open_options = WindowOpenOptions::new()
         .with_title("Femtovg on Baseview")
-        .with_size(LogicalSize::new(512, 512))
+        .with_size(PhysicalSize::new(512, 512))
         .with_gl_config(GlConfig { alpha_bits: 8, ..GlConfig::default() });
 
     Window::open_blocking(window_open_options, FemtovgExample::new);

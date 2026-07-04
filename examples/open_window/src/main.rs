@@ -1,12 +1,13 @@
 use std::cell::{Cell, RefCell};
 use std::num::NonZeroU32;
+use std::thread::sleep;
 use std::time::Duration;
 
 use rtrb::{Consumer, RingBuffer};
 
 #[cfg(target_os = "macos")]
 use baseview::copy_to_clipboard;
-use baseview::dpi::{LogicalSize, PhysicalPosition};
+use baseview::dpi::{PhysicalPosition, PhysicalSize};
 use baseview::{
     Event, EventStatus, MouseEvent, Window, WindowContext, WindowHandler, WindowOpenOptions,
     WindowSize,
@@ -40,9 +41,9 @@ impl WindowHandler for OpenWindowExample {
     }
 
     fn on_frame(&self) {
-        if !self.damaged.get() {
-            return;
-        }
+        // if !self.damaged.get() {
+        //     return;
+        // }
 
         let mut surface = self.surface.borrow_mut();
         let mut pixels = surface.buffer_mut().unwrap();
@@ -86,7 +87,7 @@ impl WindowHandler for OpenWindowExample {
         }
 
         if self.is_cursor_inside.get() {
-            let rect_size = (25.0 * scale_factor) as i32;
+            let rect_size = (25.0 * 1.0) as i32;
             let mouse_pos = self.mouse_pos.get().cast::<i32>();
 
             let rect_x_start = (mouse_pos.x - rect_size).clamp(0, width as i32) as u32;
@@ -136,7 +137,7 @@ impl WindowHandler for OpenWindowExample {
 }
 
 fn main() {
-    let window_open_options = WindowOpenOptions::new().with_size(LogicalSize::new(512.0, 512.0));
+    let window_open_options = WindowOpenOptions::new().with_size(PhysicalSize::new(512, 512));
 
     let (mut tx, rx) = RingBuffer::new(128);
 

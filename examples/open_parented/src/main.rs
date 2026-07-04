@@ -1,4 +1,4 @@
-use baseview::dpi::LogicalSize;
+use baseview::dpi::{LogicalSize, PhysicalSize};
 use baseview::{
     Event, EventStatus, Window, WindowContext, WindowHandle, WindowHandler, WindowOpenOptions,
     WindowSize,
@@ -23,7 +23,7 @@ impl ParentWindowHandler {
             .unwrap();
 
         let window_open_options = WindowOpenOptions::new()
-            .with_size(LogicalSize::new(256, 256))
+            .with_size(PhysicalSize::new(256, 256))
             .with_title("baseview child");
 
         let child_window =
@@ -120,7 +120,7 @@ impl WindowHandler for ChildWindowHandler {
 }
 
 fn main() {
-    let window_open_options = WindowOpenOptions::new().with_size(LogicalSize::new(512.0, 512.0));
+    let window_open_options = WindowOpenOptions::new().with_size(PhysicalSize::new(512, 512));
 
     Window::open_blocking(window_open_options, ParentWindowHandler::new);
 }
